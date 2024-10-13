@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="|User Details ${id}|">User Details</title>
+    <style>
+        html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /
+            min-height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            padding-bottom: 60px;
+        }
+        .back-btn-container {
+           position: relative;
+           margin-top: 10px;
+        }
+        .back-btn {
+            background-color: #008000;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #66CD00;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .update-btn:hover {
+                    background-color: #FFEA00;
+        }
+        .delete-btn:hover {
+                    background-color: #FA5F55;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .update-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div  class="header">
+        <h1>User Details</h1>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Password</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="users: ${userDetails}">
+            <td th:text="${users.id}"></td>
+            <td th:text="${users.email}"></td>
+            <td th:text="${users.fullName}"></td>
+            <td th:text="${users.password}"></td>
+            <td th:text="${users.address}"></td>
+            <td th:text="${users.phone}"></td>
+            <td>
+                <a th:href="@{/admin/user/update/{id}(id=${users.id})}" style="text-decoration: none"
+                   class="action-btn update-btn">Update</a>
+                <a th:href="@{/admin/user/delete/{id}(id=${users.id})}" style="text-decoration: none"
+                   class="action-btn delete-btn">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="back-btn-container">
+        <a th:href="@{/admin/user}" class="back-btn">Back</a>
+    </div>
+</div>
+</body>
+</html>
