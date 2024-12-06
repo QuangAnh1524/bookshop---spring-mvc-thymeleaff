@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="bookshop"/>
+    <meta name="author" content="Quang Anh"/>
+    <title>Create User</title>
+    <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet"/>
+    <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #layoutSidenav_content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .container-fluid {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        h1.mt-4 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            margin-top: -20px; /* Dịch chữ Manage Users lên */
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .create-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px; /* Tăng kích thước nút */
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px; /* Tăng kích thước chữ */
+        }
+
+        .create-btn:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px; /* Tăng padding cho thẻ td và th */
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+        }
+
+        th:not(:last-child),
+        td:not(:last-child) {
+            border-right: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-btn {
+            padding: 8px 16px; /* Tăng padding cho các nút hành động */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px; /* Tăng kích thước chữ */
+            margin-right: 5px;
+            text-decoration: none;
+        }
+
+        .view-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .update-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .view-btn:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+        .update-btn:hover {
+            background-color: #e0a800;
+            color: black;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+        .copyright {
+    position: fixed;
+    bottom: 10px;
+    left: 250px; /* Thay đổi vị trí sang góc trái */
+    font-size: 14px;
+    color: #6c757d;
+}
+
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 15px;
+            }
+
+            h1.mt-4 {
+                font-size: 24px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .create-btn {
+                margin-top: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="/admin/dashboard/layout/header :: header"></div>
+<div id="layoutSidenav">
+    <div th:insert="/admin/dashboard/layout/sidebar :: sidebar"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4">Manage Users</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Users</li>
+                </ol>
+                <div class="container-fluid mt-4">
+                    <h4 class="header">Create a User</h4>
+                    <form th:action="@{/admin/user/create}" method="post" th:object="${createForm}"
+                          class="p-4 shadow rounded bg-white">
+                        <div class="row">
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                       placeholder="Enter email" required th:field="*{email}">
+                                <small class="form-text text-muted">We'll never share your email with anyone
+                                    else.</small>
+                            </div>
+                            <!-- Password -->
+                            <div class="col-md-6 mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                       placeholder="Enter password" required th:field="*{password}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Full Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="exampleFullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="exampleFullName"
+                                       placeholder="Enter full name" th:field="*{fullName}">
+                            </div>
+                            <!-- Address -->
+                            <div class="col-md-6 mb-3">
+                                <label for="exampleAddress" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="exampleAddress" placeholder="Enter address"
+                                       th:field="*{address}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Phone -->
+                            <div class="col-md-6 mb-3">
+                                <label for="examplePhone" class="form-label">Phone</label>
+                                <input type="text" class="form-control" id="examplePhone"
+                                       placeholder="Enter phone number" th:field="*{phone}">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-2">Submit</button>
+                            <a th:href="@{/admin/user}" class="btn btn-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <!-- Bootstrap JS (CDN) -->
+            <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"
+                    crossorigin="anonymous"></script>
+
+            <!-- Custom scripts -->
+            <script th:src="@{/admin/dashboard/scripts.js}"></script>
+            <script th:src="@{/admin/dashboard/datatables-simple-demo.js}"></script>
+        </main>

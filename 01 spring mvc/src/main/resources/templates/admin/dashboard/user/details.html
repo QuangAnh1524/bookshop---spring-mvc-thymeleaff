@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="bookshop" />
     <meta name="author" content="Quang Anh" />
-    <title>Dashboard - Quang Anh - User</title>
+    <title th:text="|User Details ${id}|">User Details</title>
     <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet" />
     <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
     <style>
@@ -198,43 +198,49 @@
                     <li class="breadcrumb-item"><a th:href="@{/admin}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Users</li>
                 </ol>
-                <div class="header">
-                    <h1>Table users</h1>
-                    <a th:href="@{/admin/user/create}" class="create-btn">Create a user</a>
-                </div>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Full Name</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="users: ${usersFromView}">
-                        <td th:text="${users.id}"></td>
-                        <td th:text="${users.email}"></td>
-                        <td th:text="${users.fullName}"></td>
-                        <td>
-                            <a th:href="@{/admin/user/{id}(id=${users.id})}" class="action-btn view-btn">View</a>
-                            <a th:href="@{/admin/user/update/{id}(id=${users.id})}" class="action-btn update-btn">Update</a>
-                            <a th:href="@{/admin/user/delete/{id}(id=${users.id})}" class="action-btn delete-btn">Delete</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-        <div class="copyright">Copyright © Quang Anh</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3" th:text="'User Details of Id ' + ${id}">User Details</h1>
+        <a th:href="@{/admin/user}" class="btn btn-success">Back</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Email</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Password</th>
+                <th scope="col">Address</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${userDetails}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.fullName}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.address}"></td>
+                <td th:text="${user.phone}"></td>
+                <td>
+                    <a th:href="@{/admin/user/update/{id}(id=${user.id})}" class="btn btn-warning btn-sm">Update</a>
+                    <a th:href="@{/admin/user/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<!-- Bootstrap JS (CDN) -->
-<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
-
-<!-- Custom scripts -->
-<script th:src="@{/admin/dashboard/scripts.js}"></script>
-<script th:src="@{/admin/dashboard/datatables-simple-demo.js}"></script>
+<!-- Bootstrap JS -->
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

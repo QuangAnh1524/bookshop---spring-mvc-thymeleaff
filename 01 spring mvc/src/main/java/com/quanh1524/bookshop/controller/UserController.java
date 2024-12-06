@@ -31,20 +31,20 @@ public class UserController {
     public String showTableUser(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("usersFromView", users);
-        return "TableUser";
+        return "admin/dashboard/user/show";
     }
 
     @RequestMapping("/admin/user/{id}")
     public String detailUserPage(Model model, @PathVariable long id) {
         User userDetail = this.userService.getUserById(id);
         model.addAttribute("userDetails", userDetail);
-        return "UserDetails";
+        return "admin/dashboard/user/details";
     }
 
     @RequestMapping("/admin/user/create")
     public String createUserPage(Model model) {
         model.addAttribute("createForm", new User());
-        return "CreateUser";
+        return "admin/dashboard/user/CreateUser";
     }
 
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
@@ -57,7 +57,7 @@ public class UserController {
     public String updateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("updateForm", currentUser);
-        return "UpdateUser";
+        return "admin/dashboard/user/UpdateUser";
     }
 
     @PostMapping(value = "/admin/user/update")
