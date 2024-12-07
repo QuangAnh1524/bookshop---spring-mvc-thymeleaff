@@ -196,7 +196,8 @@
                 <h1 class="mt-4">Manage Users</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a th:href="@{/admin}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Users</li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/user}">Users</a></li>
+                    <li class="breadcrumb-item active">View</li>
                 </ol>
 <head>
     <meta charset="UTF-8">
@@ -242,5 +243,10 @@
 
 <!-- Bootstrap JS -->
 <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+
+<!-- Custom scripts -->
+<script th:src="@{/admin/dashboard/scripts.js}"></script>
+<script th:src="@{/admin/dashboard/datatables-simple-demo.js}"></script>
 </body>
 </html>

@@ -19,5 +19,10 @@ public class WebConfig implements WebMvcConfigurer {
         // Specific handler for CSS in admin.dashboard
         registry.addResourceHandler("/admin/dashboard/**")
                 .addResourceLocations("classpath:/templates/admin/dashboard/");
+
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath:/static/images/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/resources/admin/dashboard/js");
+        registry.addResourceHandler("/css/**").addResourceLocations("/resources/admin/dashboard/css");
     }
 }

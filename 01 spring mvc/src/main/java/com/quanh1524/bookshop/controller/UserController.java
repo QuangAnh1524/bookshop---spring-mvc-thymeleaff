@@ -70,7 +70,7 @@ public class UserController {
     public String deleteUserPage(Model model, @PathVariable long id) {
         User deleteUser = this.userService.getUserById(id);
         model.addAttribute("deleteForm", deleteUser);
-        return "DeleteUser";
+        return "admin/dashboard/user/DeleteUser";
     }
 
     @PostMapping(value = "/admin/user/delete")
