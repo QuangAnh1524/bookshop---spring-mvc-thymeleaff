@@ -17,4 +17,5 @@ import java.util.List;
     User getUserById(long id);
 
     void deleteUserById(long id);
+
 }

@@ -26,7 +26,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public User handleSaveUser(User user, Long roleId) {
+    public User handleSaveUser(User user) {
         if (user.getId() > 0) {
             // Cập nhật User nếu đã có ID
             User existingUser = userRepository.findById(user.getId()).orElse(null);
@@ -34,9 +34,7 @@ public class UserService {
                 existingUser.setFullName(user.getFullName());
                 existingUser.setAddress(user.getAddress());
                 existingUser.setPhone(user.getPhone());
-                Role role = roleRepository.findById(roleId)
-                        .orElseThrow(() -> new RuntimeException("Role not found"));
-                existingUser.setRole(role);  // Cập nhật Role
+                // Cập nhật Role
                 return userRepository.save(existingUser);
             }
         }
@@ -50,5 +48,9 @@ public class UserService {
 
     public void deleteUserById(long id) {
         this.userRepository.deleteById(id);
+    }
+
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
     }
 }

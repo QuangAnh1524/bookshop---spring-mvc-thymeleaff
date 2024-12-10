@@ -157,6 +157,21 @@
                                    th:field="*{fullName}">
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="inputPhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="inputPhone" placeholder="Enter phone number"
+                                   required th:field="*{phone}">
+                            <small class="form-text text-muted">Please provide a valid phone number.</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputAddress" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="Enter address"
+                                   required th:field="*{address}">
+                            <small class="form-text text-muted">Please provide your full address.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select name="roleId" id="role" class="form-select" required>
                                 <option value="" selected disabled>--- Select Role ---</option>

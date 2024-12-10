@@ -12,15 +12,13 @@ import jakarta.servlet.http.PushBuilder;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,12 +28,15 @@ public class UserController {
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UserController(UserService userService, RoleRepository roleRepository, UploadService uploadService) {
+    public UserController(UserService userService, RoleRepository roleRepository, UploadService uploadService,
+                          PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.uploadService = uploadService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping("/")
@@ -67,14 +68,19 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String createUser(Model model, @ModelAttribute("createForm") User user, @RequestParam("roleId") Long roleId,
-                             @RequestParam("file") MultipartFile file) throws IOException {
+    public String createUser(Model model, @ModelAttribute("createForm") User user,
+                             @RequestParam("file") MultipartFile file, @RequestParam("roleId") Long roleId) throws IOException {
         String fileName = this.uploadService.handleSaveFile(file, "avatar");
         System.out.println(fileName);
+        String hashPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setAvatar(fileName);
+        user.setPassword(hashPassword);
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Role ID: " + roleId));
+        user.setRole(role);
+        this.userService.handleSaveUser(user);
 
-        // this.userService.handleSaveUser(user, roleId);
-
-        return "redirect:/admin/user";  // Chuyển hướng sau khi tạo thành công
+        return "redirect:/admin/user";
     }
 
 
