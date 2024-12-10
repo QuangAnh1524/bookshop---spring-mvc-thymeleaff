@@ -1,8 +1,13 @@
 package com.quanh1524.bookshop.controller;
 
+import com.quanh1524.bookshop.domain.Role;
 import com.quanh1524.bookshop.domain.User;
+import com.quanh1524.bookshop.repository.RoleRepository;
 import com.quanh1524.bookshop.repository.UserRepository;
+import com.quanh1524.bookshop.service.RoleService;
+import com.quanh1524.bookshop.service.UploadService;
 import com.quanh1524.bookshop.service.UserService;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.PushBuilder;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,16 +15,27 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class UserController {
 
     private final UserService userService;
+    private final RoleRepository roleRepository;
+    private final UploadService uploadService;
 
-    public UserController(UserService userService) {
+
+    public UserController(UserService userService, RoleRepository roleRepository, UploadService uploadService) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
+        this.uploadService = uploadService;
     }
 
     @RequestMapping("/")
@@ -41,17 +57,26 @@ public class UserController {
         return "admin/dashboard/user/details";
     }
 
-    @RequestMapping("/admin/user/create")
+    @GetMapping("/admin/user/create")
     public String createUserPage(Model model) {
-        model.addAttribute("createForm", new User());
+        User user = new User();
+        user.setRole(new Role());
+        model.addAttribute("createForm", user);
+        model.addAttribute("roles", roleRepository.findAll());
         return "admin/dashboard/user/CreateUser";
     }
 
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public String createUser(Model model, @ModelAttribute("createForm") User user) {
-        this.userService.handleSaveUser(user);
-        return "redirect:/admin/user";
+    @PostMapping(value = "/admin/user/create")
+    public String createUser(Model model, @ModelAttribute("createForm") User user, @RequestParam("roleId") Long roleId,
+                             @RequestParam("file") MultipartFile file) throws IOException {
+        String fileName = this.uploadService.handleSaveFile(file, "avatar");
+        System.out.println(fileName);
+
+        // this.userService.handleSaveUser(user, roleId);
+
+        return "redirect:/admin/user";  // Chuyển hướng sau khi tạo thành công
     }
+
 
     @RequestMapping(value = "/admin/user/update/{id}")
     public String updateUserPage(Model model, @PathVariable long id) {
@@ -62,7 +87,7 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/update")
     public String updateUser(@ModelAttribute("updateForm") User user) {
-        this.userService.handleSaveUser(user);
+//        this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
     }
 

@@ -1,6 +1,8 @@
 package com.quanh1524.bookshop.service;
 
+import com.quanh1524.bookshop.domain.Role;
 import com.quanh1524.bookshop.domain.User;
+import com.quanh1524.bookshop.repository.RoleRepository;
 import com.quanh1524.bookshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,11 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     public String handleHello() {
@@ -22,16 +26,18 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public User handleSaveUser(User user) {
+    public User handleSaveUser(User user, Long roleId) {
         if (user.getId() > 0) {
-            User existingUser = this.userRepository.findById(user.getId()).orElse(null);
+            // Cập nhật User nếu đã có ID
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
             if (existingUser != null) {
-                // Cập nhật các trường của existingUser
                 existingUser.setFullName(user.getFullName());
                 existingUser.setAddress(user.getAddress());
                 existingUser.setPhone(user.getPhone());
-                // Không cập nhật email và password ở đây
-                return this.userRepository.save(existingUser);
+                Role role = roleRepository.findById(roleId)
+                        .orElseThrow(() -> new RuntimeException("Role not found"));
+                existingUser.setRole(role);  // Cập nhật Role
+                return userRepository.save(existingUser);
             }
         }
         // Nếu không tìm thấy user hiện có, tạo mới
