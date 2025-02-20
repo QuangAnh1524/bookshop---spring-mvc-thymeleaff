@@ -15,11 +15,12 @@
 
 <body class="sb-nav-fixed">
 
-        <div th:insert="/admin/dashboard/layout/header :: header"></div>
+<div th:insert="~{/admin/dashboard/layout/header :: header}"></div>
+
 
 <div id="layoutSidenav">
 
-    <div th:insert="/admin/dashboard/layout/sidebar :: sidebar"></div>
+    <div th:insert="~{/admin/dashboard/layout/sidebar :: sidebar}"></div>
 
     <div id="layoutSidenav_content">
         <main>
@@ -576,7 +577,7 @@
                 </div>
             </div>
         </main>
-        <div th:insert="/admin/dashboard/layout/footer :: footer"></div>
+        <div th:insert="~{/admin/dashboard/layout/footer :: footer}"></div>
 </div>
 <!-- Bootstrap JS (CDN, giữ nguyên) -->
 <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
@@ -596,6 +597,7 @@
 
 <!-- DataTables demo (điều chỉnh đường dẫn) -->
 <script th:src="@{/admin/dashboard/datatables-simple-demo.js}"></script>
-</body>
 
+</div>
+</body>
 </html>

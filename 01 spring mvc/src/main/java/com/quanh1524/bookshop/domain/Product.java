@@ -1,6 +1,9 @@
 package com.quanh1524.bookshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -9,16 +12,30 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @NotEmpty(message = "Không được để trống tên")
     private String name;
+
+    @NotNull(message = "Giá không được null")
+    @Min(value = 0, message = "Giá phải lớn hơn hoặc bằng 0")
     private double price;
     private String image;
+
+    @NotNull
+    @NotEmpty(message = "Không được để trống")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
+
+    @NotNull
+    @NotEmpty(message = "Không được để trống")
     private String shortDesc;
+
+    @NotNull
+    @Min(value = 1, message = "Số lượng cần lớn hơn hoặc bằng 1")
     private long quantity;
     private long sold;
     private String category; //thể loại sách
     private String origin; //xuất xứ
-
 
 
     public Product() {}

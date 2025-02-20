@@ -11,6 +11,10 @@ import java.io.IOException;
 @Service
 public class UploadService {
     public String handleSaveFile(MultipartFile file, String targetFolder) throws IOException {
+        //don't upload file
+        if (file.isEmpty()) {
+            return "";
+        }
         // Lấy dữ liệu file
         byte[] bytes = file.getBytes();
         String rootPath = "D:/bookshop/01 spring mvc/src/main/resources/images/";

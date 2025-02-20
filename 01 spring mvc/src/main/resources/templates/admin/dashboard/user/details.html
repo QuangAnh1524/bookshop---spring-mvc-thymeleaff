@@ -220,6 +220,8 @@
                 <th scope="col">Password</th>
                 <th scope="col">Address</th>
                 <th scope="col">Phone</th>
+                <th scope="col">Role</th>
+                <th scope="col">Avatar</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -231,6 +233,10 @@
                 <td th:text="${user.password}"></td>
                 <td th:text="${user.address}"></td>
                 <td th:text="${user.phone}"></td>
+                <td th:text="${user.role.name}"></td>
+                <td>
+                    <img th:src="@{'/images/avatar/'+${user.avatar}}" alt="Avatar" style="max-height: 100px; max-width: 100px; object-fit: cover;"/>
+                </td>
                 <td>
                     <a th:href="@{/admin/user/update/{id}(id=${user.id})}" class="btn btn-warning btn-sm">Update</a>
                     <a th:href="@{/admin/user/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">Delete</a>

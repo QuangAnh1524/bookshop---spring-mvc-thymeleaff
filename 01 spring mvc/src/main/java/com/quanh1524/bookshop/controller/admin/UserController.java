@@ -1,23 +1,18 @@
-package com.quanh1524.bookshop.controller;
+package com.quanh1524.bookshop.controller.admin;
 
 import com.quanh1524.bookshop.domain.Role;
 import com.quanh1524.bookshop.domain.User;
 import com.quanh1524.bookshop.repository.RoleRepository;
-import com.quanh1524.bookshop.repository.UserRepository;
-import com.quanh1524.bookshop.service.RoleService;
 import com.quanh1524.bookshop.service.UploadService;
 import com.quanh1524.bookshop.service.UserService;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.PushBuilder;
-import org.springframework.boot.Banner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,10 +34,10 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping("/")
-    public String showHomePage(Model model) {
-        return "Hello";
-    }
+//    @RequestMapping("/")
+//    public String showHomePage(Model model) {
+//        return "Hello";
+//    }
 
     @RequestMapping("/admin/user")
     public String showTableUser(Model model) {
@@ -68,15 +63,22 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String createUser(Model model, @ModelAttribute("createForm") User user,
-                             @RequestParam("file") MultipartFile file, @RequestParam("roleId") Long roleId) throws IOException {
+    public String createUser(Model model, @ModelAttribute("createForm") @Valid User user, BindingResult bindingResult,
+                             @RequestParam("file") MultipartFile file, @RequestParam("roleId") Long roleId
+                             ) throws IOException {
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
+        //validate
+        if (bindingResult.hasErrors()) {
+            return "admin/dashboard/user/CreateUser";
+        }
         String fileName = this.uploadService.handleSaveFile(file, "avatar");
-        System.out.println(fileName);
         String hashPassword = this.passwordEncoder.encode(user.getPassword());
         user.setAvatar(fileName);
         user.setPassword(hashPassword);
-        Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Role ID: " + roleId));
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new IllegalArgumentException("Invalid Role ID: " + roleId));
         user.setRole(role);
         this.userService.handleSaveUser(user);
 
@@ -88,12 +90,18 @@ public class UserController {
     public String updateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("updateForm", currentUser);
+        model.addAttribute("roles", roleRepository.findAll());
         return "admin/dashboard/user/UpdateUser";
     }
 
     @PostMapping(value = "/admin/user/update")
-    public String updateUser(@ModelAttribute("updateForm") User user) {
-//        this.userService.handleSaveUser(user);
+    public String updateUser(@ModelAttribute("updateForm") User user, @RequestParam("file") MultipartFile file,
+                             @RequestParam("roleId") Long roleId) throws IOException {
+        String fileName = this.uploadService.handleSaveFile(file, "avatar");
+        user.setAvatar(fileName);
+        Role role = roleRepository.findById(roleId).orElseThrow(null);
+        user.setRole(role);
+        this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
     }
 

@@ -1,6 +1,7 @@
 package com.quanh1524.bookshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -11,8 +12,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotNull
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
+
+    @NotNull
+    @Size(min = 3, message = "mat khau phai co toi thieu 3 ky tu")
     private String password;
+
+    @NotNull
+    @Size(min = 3, message = "fullname phai co toi thieu 3 ky tu")
     private String fullName;
     private String address;
     private String phone;

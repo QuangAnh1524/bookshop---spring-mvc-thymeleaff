@@ -34,7 +34,8 @@ public class UserService {
                 existingUser.setFullName(user.getFullName());
                 existingUser.setAddress(user.getAddress());
                 existingUser.setPhone(user.getPhone());
-                // Cập nhật Role
+                existingUser.setAvatar(user.getAvatar());
+                existingUser.setRole(user.getRole());
                 return userRepository.save(existingUser);
             }
         }
@@ -50,7 +51,4 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public Role getRoleByName(String name) {
-        return this.roleRepository.findByName(name);
-    }
 }
