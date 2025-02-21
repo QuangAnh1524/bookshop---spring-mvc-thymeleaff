@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="bookshop" />
+    <meta name="author" content="Quang Anh" />
+    <title th:text="|Product Details ${id}|">Product Details</title>
+    <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet" />
+    <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="/admin/dashboard/layout/header :: header"></div>
+<div id="layoutSidenav">
+    <div th:insert="/admin/dashboard/layout/sidebar :: sidebar"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4">Manage Products</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a th:href="@{/admin}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/product}">Products</a></li>
+                    <li class="breadcrumb-item active">View</li>
+                </ol>
+                <div class="container mt-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="h3" th:text="'Product Details of Id ' + ${id}">Product Details</h1>
+                        <a th:href="@{/admin/product}" class="btn btn-success">Back</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Detail Description</th>
+                                <th scope="col">Short Description</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Sold</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Origin</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${productDetails}">
+                                <td th:text="${product.id}"></td>
+                                <td th:text="${product.name}"></td>
+                                <td th:text="${product.price}"></td>
+                                <td>
+                                    <img th:src="@{'/images/product/'+${product.image}}" alt="Product Image" style="max-height: 100px; max-width: 100px; object-fit: cover;"/>
+                                </td>
+                                <td th:text="${product.detailDesc}"></td>
+                                <td th:text="${product.shortDesc}"></td>
+                                <td th:text="${product.quantity}"></td>
+                                <td th:text="${product.sold}"></td>
+                                <td th:text="${product.category}"></td>
+                                <td th:text="${product.origin}"></td>
+                                <td>
+                                    <a th:href="@{/admin/product/update/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Update</a>
+                                    <a th:href="@{/admin/product/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<!-- Custom scripts -->
+<script th:src="@{/admin/dashboard/scripts.js}"></script>
+<script th:src="@{/admin/dashboard/datatables-simple-demo.js}"></script>
+</body>
+</html>

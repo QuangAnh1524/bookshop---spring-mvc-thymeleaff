@@ -65,7 +65,7 @@ public class UserController {
     @PostMapping(value = "/admin/user/create")
     public String createUser(Model model, @ModelAttribute("createForm") @Valid User user, BindingResult bindingResult,
                              @RequestParam("file") MultipartFile file, @RequestParam("roleId") Long roleId
-                             ) throws IOException {
+    ) throws IOException {
         List<FieldError> errors = bindingResult.getFieldErrors();
         for (FieldError error : errors) {
             System.out.println(error.getField() + " - " + error.getDefaultMessage());
@@ -84,7 +84,6 @@ public class UserController {
 
         return "redirect:/admin/user";
     }
-
 
     @RequestMapping(value = "/admin/user/update/{id}")
     public String updateUserPage(Model model, @PathVariable long id) {
@@ -113,7 +112,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/delete")
-    public String deleteUser(Model model, @ModelAttribute("deleteForm") User user) {
+    public String deleteUser(@ModelAttribute("deleteForm") User user) {
         this.userService.deleteUserById(user.getId());
         return "redirect:/admin/user";
     }

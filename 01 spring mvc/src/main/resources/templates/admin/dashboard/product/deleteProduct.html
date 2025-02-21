@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content="bookshop"/>
     <meta name="author" content="Quang Anh"/>
-    <title>Delete User</title>
+    <title>Delete Product</title>
     <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet"/>
     <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -194,31 +194,31 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <h1 class="mt-4">Manage Users</h1>
+                <h1 class="mt-4">Manage Products</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a th:href="@{/admin}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a th:href="@{/admin/user}">Users</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/admin/product}">Products</a></li>
                     <li class="breadcrumb-item active">Delete</li>
                 </ol>
-
 
                 <body class="bg-light">
                 <div class="container mt-5">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h1 class="card-title text-danger">Delete the user with id = <span th:text="${id}"></span>
+                            <h1 class="card-title text-danger">Delete the product with id = <span
+                                    th:text="${id}"></span>
                             </h1>
 
                             <div class="alert alert-danger" role="alert">
-                                Are you sure you want to delete this user?
+                                Are you sure you want to delete this product?
                             </div>
 
-                            <form th:action="@{/admin/user/delete}" method="post" th:object="${deleteForm}">
+                            <form th:action="@{/admin/product/delete}" method="post" th:object="${deleteForm}">
                                 <input type="hidden" id="exampleId" th:field="*{id}">
 
                                 <div class="d-flex justify-content-between mt-4">
                                     <button type="submit" class="btn btn-danger">Confirm</button>
-                                    <a th:href="@{/admin/user}" class="btn btn-success">Back</a>
+                                    <a th:href="@{/admin/product}" class="btn btn-success">Back</a>
                                 </div>
                             </form>
                         </div>
