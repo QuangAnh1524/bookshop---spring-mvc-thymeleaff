@@ -96,8 +96,14 @@ public class UserController {
     @PostMapping(value = "/admin/user/update")
     public String updateUser(@ModelAttribute("updateForm") User user, @RequestParam("file") MultipartFile file,
                              @RequestParam("roleId") Long roleId) throws IOException {
-        String fileName = this.uploadService.handleSaveFile(file, "avatar");
-        user.setAvatar(fileName);
+        if (!file.isEmpty()) {
+            String fileName = this.uploadService.handleSaveFile(file, "avatar");
+            user.setAvatar(fileName); //cap nhat anh moi
+        } else {
+            //giu anh cu
+            User existingUser = this.userService.getUserById(user.getId());
+            user.setAvatar(existingUser.getAvatar());
+        }
         Role role = roleRepository.findById(roleId).orElseThrow(null);
         user.setRole(role);
         this.userService.handleSaveUser(user);

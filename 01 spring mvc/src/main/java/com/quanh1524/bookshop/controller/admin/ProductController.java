@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -61,6 +62,27 @@ public class ProductController {
         Product product = this.productService.getProductById(id);
         model.addAttribute("productDetails", product);
         return "admin/dashboard/product/detailProduct";
+    }
+
+    @GetMapping("/admin/product/update/{id}")
+    public String updateProductPage(Model model, @PathVariable long id) {
+        Product product = this.productService.getProductById(id);
+        model.addAttribute("updateForm", product);
+        return "admin/dashboard/product/updateProduct";
+    }
+
+    @PostMapping("/admin/product/update")
+    public String updateProduct(@ModelAttribute("updateForm") Product product, @RequestParam("file") MultipartFile file)
+                                throws IOException {
+        if (!file.isEmpty()) {
+            String fileName = this.uploadService.handleSaveFile(file, "product");
+            product.setImage(fileName);
+        } else {
+            Product existingProduct = this.productService.getProductById(product.getId());
+            product.setImage(existingProduct.getImage());
+        }
+        this.productService.saveProductServie(product);
+        return "redirect:/admin/product";
     }
 
     @GetMapping("/admin/product/delete/{id}")

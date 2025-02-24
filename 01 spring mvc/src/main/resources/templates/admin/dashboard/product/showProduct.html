@@ -2,22 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="bookshop" />
-    <meta name="author" content="Quang Anh" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="bookshop"/>
+    <meta name="author" content="Quang Anh"/>
     <title>Dashboard - Quang Anh - Product</title>
-    <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet" />
+    <link th:href="@{/admin/dashboard/styles.css}" rel="stylesheet"/>
     <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
     <style>
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: auto;
         }
-
+        .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
         body {
             font-family: Arial, sans-serif;
             background-color: white;
