@@ -2,6 +2,7 @@ package com.quanh1524.bookshop.service;
 
 import com.quanh1524.bookshop.domain.Role;
 import com.quanh1524.bookshop.domain.User;
+import com.quanh1524.bookshop.domain.dto.RegisterDTO;
 import com.quanh1524.bookshop.repository.RoleRepository;
 import com.quanh1524.bookshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,18 @@ public class UserService {
     public void deleteUserById(long id) {
         this.userRepository.deleteById(id);
     }
+
+    public Role getRoleByName(String role) {
+        return this.roleRepository.findByName(role);
+    }
+
+    public User registerDTOtoUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setFullName(registerDTO.getFullName());
+        user.setEmail(registerDTO.getEmail());
+        user.setPassword(registerDTO.getPassword());
+        return user;
+    }
+
 
 }

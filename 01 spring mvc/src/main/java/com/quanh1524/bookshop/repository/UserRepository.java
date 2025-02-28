@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
     public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,5 +18,7 @@ import java.util.List;
     User getUserById(long id);
 
     void deleteUserById(long id);
+
+    boolean existsByEmail(String email);
 
 }
