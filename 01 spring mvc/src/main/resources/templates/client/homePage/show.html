@@ -18,7 +18,6 @@
     <link th:href="@{clientLib/lib/lightbox/css/lightbox.min.css}" rel="stylesheet">
     <link th:href="@{clientLib/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
 
-
     <!-- Customized Bootstrap Stylesheet -->
     <link th:href="@{clientLib/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -34,11 +33,26 @@
 </div>
 <!-- Spinner End -->
 
-
-<!-- Navbar start -->
+<!-- Navbar Start -->
 <div th:insert="~{client/layout/header :: header}"></div>
 <!-- Navbar End -->
 
+<!-- User Info Section -->
+<div class="container py-3" id="user-info-section" style="margin-top: 140px;">
+    <div th:if="${isLoggedIn}" class="alert alert-success">
+        <p>Welcome, <strong th:text="${userEmail}"></strong>!</p>
+        <p th:if="${isAdmin}">You are an <strong>ADMIN</strong>.</p>
+        <p th:unless="${isAdmin}">You are a <strong>USER</strong>.</p>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+        <a th:href="@{/admin}" th:if="${isAdmin}" class="btn btn-primary btn-sm">Go to Admin Dashboard</a>
+    </div>
+    <div th:unless="${isLoggedIn}" class="alert alert-info">
+        <p>You are not logged in.</p>
+        <a th:href="@{/login}" class="btn btn-primary btn-sm">Login</a>
+        <a th:href="@{/register}" class="btn btn-secondary btn-sm">Register</a>
+    </div>
+</div>
+<!-- User Info Section End -->
 
 <!-- Modal Search Start -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -60,18 +74,15 @@
 </div>
 <!-- Modal Search End -->
 
-
 <!-- Hero Start -->
 <div th:insert="~{client/layout/banner :: banner}"></div>
 <!-- Hero End -->
 
-
-<!-- Featurs Section Start -->
+<!-- Features Section Start -->
 <div th:insert="~{client/layout/feature :: feature}"></div>
-<!-- Featurs Section End -->
+<!-- Features Section End -->
 
-
-<!-- Fruits Shop Start-->
+<!-- Fruits Shop Start -->
 <div class="container-fluid fruite py-5">
     <div class="container py-5">
         <div class="tab-class text-center">
@@ -104,114 +115,35 @@
                                              style="top: 10px; left: 10px;" th:text="${products.category}">
                                         </div>
                                         <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                            <a th:href="@{/product/{id}(id=${products.id})}" th:text="${products.name}" style="font-weight: bold; font-size: 1.5em;"></a>
+                                            <a th:href="@{/product/{id}(id=${products.id})}" th:text="${products.name}"
+                                               style="font-weight: bold; font-size: 1.5em;"></a>
                                             <p th:text="${products.shortDesc}"></p>
                                             <div class="d-flex justify-content-between flex-lg-wrap">
                                                 <p class="text-dark fs-5 fw-bold mb-0" th:text="${products.price}+'đ'"></p>
-                                                <a href="#"
-                                                   class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                    cart</a>
+                                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                    </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-<!-- Fruits Shop End-->
-
-
-<!--&lt;!&ndash; Featurs Start &ndash;&gt;-->
-<!--<div class="container-fluid service py-5">-->
-<!--    <div class="container py-5">-->
-<!--        <div class="row g-4 justify-content-center">-->
-<!--            <div class="col-md-6 col-lg-4">-->
-<!--                <a href="#">-->
-<!--                    <div class="service-item bg-secondary rounded border border-secondary">-->
-<!--                        <img src="clientLib/img/featur-1.jpg" class="img-fluid rounded-top w-100" alt="">-->
-<!--                        <div class="px-4 rounded-bottom">-->
-<!--                            <div class="service-content bg-primary text-center p-4 rounded">-->
-<!--                                <h5 class="text-white">Fresh Apples</h5>-->
-<!--                                <h3 class="mb-0">20% OFF</h3>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="col-md-6 col-lg-4">-->
-<!--                <a href="#">-->
-<!--                    <div class="service-item bg-dark rounded border border-dark">-->
-<!--                        <img src="clientLib/img/featur-2.jpg" class="img-fluid rounded-top w-100" alt="">-->
-<!--                        <div class="px-4 rounded-bottom">-->
-<!--                            <div class="service-content bg-light text-center p-4 rounded">-->
-<!--                                <h5 class="text-primary">Tasty Fruits</h5>-->
-<!--                                <h3 class="mb-0">Free delivery</h3>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="col-md-6 col-lg-4">-->
-<!--                <a href="#">-->
-<!--                    <div class="service-item bg-primary rounded border border-primary">-->
-<!--                        <img src="clientLib/img/featur-3.jpg" class="img-fluid rounded-top w-100" alt="">-->
-<!--                        <div class="px-4 rounded-bottom">-->
-<!--                            <div class="service-content bg-secondary text-center p-4 rounded">-->
-<!--                                <h5 class="text-white">Exotic Vegitable</h5>-->
-<!--                                <h3 class="mb-0">Discount 30$</h3>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--&lt;!&ndash; Featurs End &ndash;&gt;-->
-
-
-<!-- Vesitable Shop Start-->
-
-<!-- Vesitable Shop End -->
-
-
-<!-- Banner Section Start-->
-
-<!-- Banner Section End -->
-
-
-<!-- Bestsaler Product Start -->
-
-<!-- Bestsaler Product End -->
-
-
-<!-- Fact Start -->
-
-<!-- Fact Start -->
-
-
-<!-- Tastimonial Start -->
-
-<!-- Tastimonial End -->
-
+<!-- Fruits Shop End -->
 
 <!-- Footer Start -->
 <div th:insert="~{client/layout/footer :: footer}"></div>
-<!-- Copyright End -->
-
+<!-- Footer End -->
 
 <!-- Back to Top -->
 <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
         class="fa fa-arrow-up"></i></a>
-
 
 <!-- JavaScript Libraries -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -220,7 +152,6 @@
 <script th:src="@{clientLib/lib/waypoints/waypoints.min.js}"></script>
 <script th:src="@{clientLib/lib/lightbox/js/lightbox.min.js}"></script>
 <script th:src="@{clientLib/lib/owlcarousel/owl.carousel.min.js}"></script>
-
 
 <!-- Template Javascript -->
 <script th:src="@{clientLib/js/main.js}"></script>

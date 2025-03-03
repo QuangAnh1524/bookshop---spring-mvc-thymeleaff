@@ -3,8 +3,10 @@ package com.quanh1524.bookshop.controller.admin;
 import com.quanh1524.bookshop.domain.Role;
 import com.quanh1524.bookshop.domain.User;
 import com.quanh1524.bookshop.repository.RoleRepository;
+import com.quanh1524.bookshop.service.SecurityUtil;
 import com.quanh1524.bookshop.service.UploadService;
 import com.quanh1524.bookshop.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,31 +20,30 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
+@PreAuthorize("hasRole('Admin')")
 public class UserController {
 
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final UploadService uploadService;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtil securityUtil;
 
 
     public UserController(UserService userService, RoleRepository roleRepository, UploadService uploadService,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder, SecurityUtil securityUtil) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
+        this.securityUtil = securityUtil;
     }
-
-//    @RequestMapping("/")
-//    public String showHomePage(Model model) {
-//        return "Hello";
-//    }
 
     @RequestMapping("/admin/user")
     public String showTableUser(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("usersFromView", users);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/user/show";
     }
 
@@ -50,6 +51,7 @@ public class UserController {
     public String detailUserPage(Model model, @PathVariable long id) {
         User userDetail = this.userService.getUserById(id);
         model.addAttribute("userDetails", userDetail);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/user/details";
     }
 
@@ -59,6 +61,7 @@ public class UserController {
         user.setRole(new Role());
         model.addAttribute("createForm", user);
         model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/user/CreateUser";
     }
 
@@ -90,6 +93,7 @@ public class UserController {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("updateForm", currentUser);
         model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/user/UpdateUser";
     }
 
@@ -114,6 +118,7 @@ public class UserController {
     public String deleteUserPage(Model model, @PathVariable long id) {
         User deleteUser = this.userService.getUserById(id);
         model.addAttribute("deleteForm", deleteUser);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/user/DeleteUser";
     }
 

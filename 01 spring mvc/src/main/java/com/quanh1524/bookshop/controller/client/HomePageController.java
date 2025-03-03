@@ -6,6 +6,7 @@ import com.quanh1524.bookshop.domain.User;
 import com.quanh1524.bookshop.domain.dto.RegisterDTO;
 import com.quanh1524.bookshop.repository.UserRepository;
 import com.quanh1524.bookshop.service.ProductService;
+import com.quanh1524.bookshop.service.SecurityUtil;
 import com.quanh1524.bookshop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,18 +26,24 @@ public class HomePageController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final SecurityUtil securityUtil;
 
-    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository, SecurityUtil securityUtil) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.securityUtil = securityUtil;
     }
 
     @GetMapping("/")
     public String HomePage(Model model) {
         List<Product> productList = productService.getAllProducts();
         model.addAttribute("productsFromView", productList);
+        SecurityUtil.UserInfo userInfo = securityUtil.getCurrentUserInfo();
+        model.addAttribute("isLoggedIn", userInfo.isLoggedIn());
+        model.addAttribute("userEmail", userInfo.getEmail());
+        model.addAttribute("isAdmin", userInfo.isAdmin());
         return "client/homePage/show";
     }
 

@@ -2,8 +2,10 @@ package com.quanh1524.bookshop.controller.admin;
 
 import com.quanh1524.bookshop.domain.Product;
 import com.quanh1524.bookshop.service.ProductService;
+import com.quanh1524.bookshop.service.SecurityUtil;
 import com.quanh1524.bookshop.service.UploadService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,20 +17,23 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-
+@PreAuthorize("hasRole('Admin')")
 public class ProductController {
     private final UploadService uploadService;
     private final ProductService productService;
+    private final SecurityUtil securityUtil;
 
-    public ProductController(UploadService uploadService, ProductService productService) {
+    public ProductController(UploadService uploadService, ProductService productService, SecurityUtil securityUtil) {
         this.uploadService = uploadService;
         this.productService = productService;
+        this.securityUtil = securityUtil;
     }
 
     @GetMapping("/admin/product")
     public String getProductDashboard(Model model) {
         List<Product> products = this.productService.getAllProducts();
         model.addAttribute("productsFromView", products);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/product/showProduct";
     }
 
@@ -36,6 +41,7 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("createForm", product);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/product/createProduct";
     }
 
@@ -68,6 +74,7 @@ public class ProductController {
     public String updateProductPage(Model model, @PathVariable long id) {
         Product product = this.productService.getProductById(id);
         model.addAttribute("updateForm", product);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/product/updateProduct";
     }
 
@@ -89,6 +96,7 @@ public class ProductController {
     public String getDeleteProductPage(Model model, @PathVariable long id) {
         Product deleteProduct = this.productService.getProductById(id);
         model.addAttribute("deleteForm", deleteProduct);
+        model.addAttribute("userEmail", securityUtil.getCurrentUserInfo().getEmail());
         return "admin/dashboard/product/deleteProduct";
     }
 

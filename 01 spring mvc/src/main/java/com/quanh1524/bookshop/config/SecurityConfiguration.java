@@ -29,9 +29,23 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //cau hinh quyen truy cap
-        httpSecurity.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        httpSecurity.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("Admin")
+                .anyRequest().authenticated()
+        );
         //cau hinh form login
-        httpSecurity.formLogin(formLogin -> formLogin.loginPage("/login").failureForwardUrl("/login?error").permitAll());
+        httpSecurity.formLogin(formLogin ->
+                formLogin.loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error")
+                        .permitAll());
+        //cau hinh log out
+        httpSecurity.logout(logout -> logout.logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll());
 
         httpSecurity.userDetailsService(userDetailsService);
         return httpSecurity.build();
