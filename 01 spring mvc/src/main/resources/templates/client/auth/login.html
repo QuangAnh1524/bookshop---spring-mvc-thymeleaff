@@ -31,7 +31,9 @@ height: 100%;
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                      class="img-fluid" alt="Sample image">
             </div>
+
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
                 <form th:action="@{/login}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">

@@ -30,7 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //cau hinh quyen truy cap
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/register","/logout", "/css/**", "/js/**", "/images/**", "/clientLib/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("Admin")
                 .anyRequest().authenticated()
         );
@@ -43,9 +43,12 @@ public class SecurityConfiguration {
                         .failureUrl("/login?error")
                         .permitAll());
         //cau hinh log out
-        httpSecurity.logout(logout -> logout.logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll());
+        httpSecurity.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                );
 
         httpSecurity.userDetailsService(userDetailsService);
         return httpSecurity.build();
