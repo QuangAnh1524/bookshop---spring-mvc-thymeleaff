@@ -1,6 +1,8 @@
 package com.quanh1524.bookshop.service;
 
 import com.quanh1524.bookshop.domain.Product;
+import com.quanh1524.bookshop.repository.CartDetailRepository;
+import com.quanh1524.bookshop.repository.CartRepository;
 import com.quanh1524.bookshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,15 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+    private final CartDetailRepository cartDetailRepository;
+    private final UserService userService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CartRepository cartRepository, CartDetailRepository cartDetailRepository, UserService userService) {
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
+        this.cartDetailRepository = cartDetailRepository;
+        this.userService = userService;
     }
 
     public Product createProduct(Product product) {
@@ -43,4 +51,5 @@ public class ProductService {
         updateProduct.setImage(product.getImage());
         return this.productRepository.save(updateProduct);
     }
+
 }

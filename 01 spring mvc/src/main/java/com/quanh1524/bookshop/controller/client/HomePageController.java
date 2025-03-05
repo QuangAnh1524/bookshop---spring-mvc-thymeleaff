@@ -8,6 +8,7 @@ import com.quanh1524.bookshop.repository.UserRepository;
 import com.quanh1524.bookshop.service.ProductService;
 import com.quanh1524.bookshop.service.SecurityUtil;
 import com.quanh1524.bookshop.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -38,10 +40,13 @@ public class HomePageController {
     }
 
     @GetMapping("/")
-    public String HomePage(Model model) {
+    public String HomePage(Model model, HttpSession session) {
         List<Product> productList = productService.getAllProducts();
         model.addAttribute("productsFromView", productList);
         SecurityUtil.UserInfo userInfo = securityUtil.getCurrentUserInfo();
+//        System.out.printf("Session ID: %s%n", session.getId());
+//        System.out.printf("Create at: %s%n", new Date(session.getCreationTime()));
+//        System.out.println("Session Last Accessed: " + new Date(session.getLastAccessedTime()));
         model.addAttribute("isLoggedIn", userInfo.isLoggedIn());
         model.addAttribute("userEmail", userInfo.getEmail());
         model.addAttribute("isAdmin", userInfo.isAdmin());

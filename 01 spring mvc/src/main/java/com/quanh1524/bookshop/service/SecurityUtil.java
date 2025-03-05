@@ -37,7 +37,8 @@ public class SecurityUtil {
             String email = authentication.getName();
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(auth -> auth.getAuthority().toUpperCase().contains("ADMIN"));
-            System.out.println("Email: " + email + ", isAdmin: " + isAdmin);
+            System.out.println("Authenticated: " + (authentication.getDetails() != null ? "RememberMe" : "Form Login"));
+//            System.out.println("Email: " + email + ", isAdmin: " + isAdmin);
             return new UserInfo(email, isAdmin, true);
         }
         return new UserInfo(null, false, false);

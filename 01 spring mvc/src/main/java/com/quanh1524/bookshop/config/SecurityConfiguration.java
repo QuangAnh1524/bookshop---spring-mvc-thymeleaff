@@ -47,8 +47,18 @@ public class SecurityConfiguration {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                );
+                .deleteCookies("JSESSIONID", "remember-me")
+                .permitAll());
+        //remember me
+        httpSecurity.rememberMe(rememberMe -> rememberMe
+                .key("quang-anh-1524-key")
+                .tokenValiditySeconds(7*24*60*60)
+                .rememberMeParameter("remember-me")
+                .userDetailsService(userDetailsService)
+                .authenticationSuccessHandler((request, response, authentication) -> {
+                    System.out.println("Remember Me authentication successful for: " + authentication.getName());
+                    response.sendRedirect("/");
+                }));
 
         httpSecurity.userDetailsService(userDetailsService);
         return httpSecurity.build();
