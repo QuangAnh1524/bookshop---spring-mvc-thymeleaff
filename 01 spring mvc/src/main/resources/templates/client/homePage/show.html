@@ -38,24 +38,7 @@
 <!-- Navbar End -->
 
 <!-- User Info Section -->
-<div class="container py-3" id="user-info-section" style="margin-top: 140px;">
-    <div th:if="${isLoggedIn}" class="alert alert-success">
-        <p>Welcome, <strong th:text="${userEmail}"></strong>!</p>
-        <p th:if="${isAdmin}">You are an <strong>ADMIN</strong>.</p>
-        <p th:unless="${isAdmin}">You are a <strong>USER</strong>.</p>
-        <form th:action="@{/logout}" method="post" style="display: inline;">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-        </form>
-        <a th:href="@{/admin}" th:if="${isAdmin}" target="_blank" class="btn btn-primary btn-sm">Go to Admin
-            Dashboard</a>
-    </div>
-    <div th:unless="${isLoggedIn}" class="alert alert-info">
-        <p>You are not logged in.</p>
-        <a th:href="@{/login}" class="btn btn-primary btn-sm">Login</a>
-        <a th:href="@{/register}" class="btn btn-secondary btn-sm">Register</a>
-    </div>
-</div>
+
 <!-- User Info Section End -->
 
 <!-- Modal Search Start -->
@@ -125,7 +108,7 @@
                                             <div class="d-flex justify-content-between flex-lg-wrap">
                                                 <p class="text-dark fs-5 fw-bold mb-0"
                                                    th:text="${products.price}+'đ'"></p>
-                                                <form th:action="@{/add-product-to-cart/{id}(id=${product.id})}"
+                                                <form th:action="@{/add-product-to-cart/{id}(id=${products.id})}"
                                                       method="post">
                                                     <input type="hidden" th:name="${_csrf.parameterName}"
                                                            th:value="${_csrf.token}"/>
