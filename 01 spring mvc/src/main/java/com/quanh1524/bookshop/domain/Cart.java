@@ -67,15 +67,20 @@ public class Cart {
     }
 
     public double getTotalPrice() {
-        return cartDetails.stream()
-                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
-                .sum();
+        double result = 0.0;
+        for (CartDetail detail : cartDetails) {
+            double v = detail.getQuantity() * detail.getPrice();
+            result += v;
+        }
+        return result;
     }
 
     public double getTotalPriceWithTax() {
-        double total = cartDetails.stream()
-                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
-                .sum();
+        double total = 0.0;
+        for (CartDetail detail : cartDetails) {
+            double v = detail.getQuantity() * detail.getPrice();
+            total += v;
+        }
         return total + 30000;
     }
 

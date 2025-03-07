@@ -25,6 +25,44 @@
     <link th:href="@{clientLib/css/style.css}" rel="stylesheet">
 </head>
 <body>
+<style>
+    .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination li.active a {
+    background-color: #82ae46;
+    color: white;
+    border-color: #82ae46;
+}
+
+.pagination li.disabled span {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    color: #ccc;
+    border-radius: 5px;
+}
+</style>
 
 <!-- Spinner Start -->
 <div id="spinner"
@@ -60,6 +98,7 @@
     </div>
 </div>
 <!-- Modal Search End -->
+<!-- Phân trang -->
 
 <!-- Hero Start -->
 <div th:insert="~{client/layout/banner :: banner}"></div>
@@ -127,6 +166,24 @@
             </div>
         </div>
     </div>
+    <div class="pagination" th:if="${totalPages > 1}">
+        <ul>
+            <li th:class="${currentPage == 0} ? 'disabled' : ''">
+                <a th:if="${currentPage > 0}" th:href="@{/(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy})}">Trước</a>
+                <span th:unless="${currentPage > 0}">Trước</span>
+            </li>
+
+            <li th:each="i: ${#numbers.sequence(0, totalPages - 1)}"
+                th:class="${currentPage == i} ? 'active' : ''">
+                <a th:href="@{/(page=${i}, size=${pageSize}, sortBy=${sortBy})}" th:text="${i + 1}"></a>
+            </li>
+
+            <li th:class="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy})}">Sau</a>
+                <span th:unless="${currentPage < totalPages - 1}">Sau</span>
+            </li>
+        </ul>
+    </div>
 </div>
 <!-- Fruits Shop End -->
 
@@ -148,5 +205,23 @@
 
 <!-- Template Javascript -->
 <script th:src="@{clientLib/js/main.js}"></script>
+<!-- Thêm đoạn script này vào cuối trang, trước thẻ đóng body -->
+<script>
+    // Lưu vị trí cuộn khi người dùng nhấp vào liên kết phân trang
+    document.querySelectorAll('.pagination a').forEach(link => {
+        link.addEventListener('click', function() {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+    });
+
+    // Khôi phục vị trí cuộn khi trang được tải
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            sessionStorage.removeItem('scrollPosition');
+        }
+    });
+</script>
 </body>
 </html>

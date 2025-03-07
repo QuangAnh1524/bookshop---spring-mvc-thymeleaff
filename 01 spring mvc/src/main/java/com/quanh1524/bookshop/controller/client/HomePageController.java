@@ -9,6 +9,7 @@ import com.quanh1524.bookshop.service.SecurityUtil;
 import com.quanh1524.bookshop.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,14 +42,19 @@ public class HomePageController {
     }
 
     @GetMapping("/")
-    public String HomePage(Model model, HttpSession session) {
-        List<Product> productList = productService.getAllProducts();
-        model.addAttribute("productsFromView", productList);
+    public String HomePage(Model model, HttpSession session,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "4") int size,
+                           @RequestParam(defaultValue = "id") String sortBy) {
 
+        Page<Product> productPage = productService.getProductPaged(page, size, sortBy);
+        model.addAttribute("productsFromView", productPage.getContent());
+        model.addAttribute("currentPage", productPage.getNumber());
+        model.addAttribute("totalItems", productPage.getTotalElements());
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("sortBy", sortBy);
         SecurityUtil.UserInfo userInfo = securityUtil.getCurrentUserInfo();
-//        System.out.printf("Session ID: %s%n", session.getId());
-//        System.out.printf("Create at: %s%n", new Date(session.getCreationTime()));
-//        System.out.println("Session Last Accessed: " + new Date(session.getLastAccessedTime()));
         int cartItemCount = 0;
         if (userInfo.isLoggedIn()) {
             Cart cart = cartService.getOrCreateCart(userService.findByEmail(userInfo.getEmail()).getFirst(), session);
@@ -111,10 +117,12 @@ public class HomePageController {
             return "redirect:/login";
         }
         Cart cart = cartService.getOrCreateCart(userService.findByEmail(userInfo.getEmail()).getFirst(), session);
+        int cartItemCount = cart.getSum();
         model.addAttribute("cart", cart);
         model.addAttribute("isLoggedIn", userInfo.isLoggedIn());
         model.addAttribute("userEmail", userInfo.getEmail());
         model.addAttribute("isAdmin", userInfo.isAdmin());
+        model.addAttribute("cartItemCount", cartItemCount);
         return "client/cart/cart";
     }
 

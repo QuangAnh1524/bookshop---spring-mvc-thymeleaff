@@ -4,6 +4,10 @@ import com.quanh1524.bookshop.domain.Product;
 import com.quanh1524.bookshop.repository.CartDetailRepository;
 import com.quanh1524.bookshop.repository.CartRepository;
 import com.quanh1524.bookshop.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,4 +56,8 @@ public class ProductService {
         return this.productRepository.save(updateProduct);
     }
 
+    public Page<Product> getProductPaged(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return productRepository.findAll(pageable);
+    }
 }
