@@ -25,19 +25,20 @@ public class CartService {
         this.productService = productService;
         this.userService = userService;
     }
+
     //tao gio hang cho user
     public Cart getOrCreateCart(User user, HttpSession session) {
         if (user == null) {
-                throw new IllegalStateException("User must be logged in");
+            throw new IllegalStateException("User must be logged in");
         }
-            Cart cart = cartRepository.findByUserId(user.getId());
-            if (cart == null) {
-                cart = new Cart();
-                cart.setUser(user);
-                cart.setSum(0);
-                cart.setCartDetails(new ArrayList<>());
-                cartRepository.save(cart);
-            }
+        Cart cart = cartRepository.findByUserId(user.getId());
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setSum(0);
+            cart.setCartDetails(new ArrayList<>());
+            cartRepository.save(cart);
+        }
         return cart;
     }
 
@@ -66,5 +67,43 @@ public class CartService {
         }
         cart.setSum(sum);
         cartRepository.save(cart);
+    }
+
+    public void updateQuantity(long cartDetailId, int change, User user, HttpSession session) {
+        Cart cart = getOrCreateCart(user, session);
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId).orElse(null);
+        if (cartDetail != null && cartDetail.getCart().getId() == (cart.getId())) {
+            int newQuantity = (int) (cartDetail.getQuantity() + change);
+            if (newQuantity <= 0) {
+                cart.getCartDetails().remove(cartDetail);
+                cartDetailRepository.delete(cartDetail);
+            } else {
+                cartDetail.setQuantity(newQuantity);
+                cartDetailRepository.save(cartDetail);
+            }
+            int sum = 0;
+            for (CartDetail detail : cart.getCartDetails()) {
+                int quantity = (int) detail.getQuantity();
+                sum += quantity;
+            }
+            cart.setSum(sum);
+            cartRepository.save(cart);
+        }
+    }
+
+    public void removeFromCart(Long cartDetailId, User user, HttpSession session) {
+        Cart cart = getOrCreateCart(user, session);
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId).orElse(null);
+        if (cartDetail != null && cartDetail.getCart().getId() == cart.getId()) {
+            cart.getCartDetails().remove(cartDetail);
+            cartDetailRepository.delete(cartDetail);
+            int sum = 0;
+            for (CartDetail detail : cart.getCartDetails()) {
+                int quantity = (int) detail.getQuantity();
+                sum += quantity;
+            }
+            cart.setSum(sum);
+            cartRepository.save(cart);
+        }
     }
 }

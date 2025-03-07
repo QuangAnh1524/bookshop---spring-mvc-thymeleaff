@@ -1,9 +1,6 @@
 package com.quanh1524.bookshop.controller.client;
 
-import com.quanh1524.bookshop.domain.Cart;
-import com.quanh1524.bookshop.domain.Product;
-import com.quanh1524.bookshop.domain.Role;
-import com.quanh1524.bookshop.domain.User;
+import com.quanh1524.bookshop.domain.*;
 import com.quanh1524.bookshop.domain.dto.RegisterDTO;
 import com.quanh1524.bookshop.repository.UserRepository;
 import com.quanh1524.bookshop.service.CartService;
@@ -110,11 +107,15 @@ public class HomePageController {
     @GetMapping("/cart")
     public String getCartPage(Model model, HttpSession session) {
         SecurityUtil.UserInfo userInfo = securityUtil.getCurrentUserInfo();
-        Cart cart = cartService.getOrCreateCart(userInfo.isLoggedIn() ? userService.findByEmail(userInfo.getEmail()).getFirst() : null, session);
+        if (!userInfo.isLoggedIn()) {
+            return "redirect:/login";
+        }
+        Cart cart = cartService.getOrCreateCart(userService.findByEmail(userInfo.getEmail()).getFirst(), session);
         model.addAttribute("cart", cart);
         model.addAttribute("isLoggedIn", userInfo.isLoggedIn());
         model.addAttribute("userEmail", userInfo.getEmail());
         model.addAttribute("isAdmin", userInfo.isAdmin());
-        return "client/cart/show";
+        return "client/cart/cart";
     }
+
 }

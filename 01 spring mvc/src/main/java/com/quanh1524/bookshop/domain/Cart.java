@@ -65,4 +65,18 @@ public class Cart {
     public void setCartDetails(List<CartDetail> cartDetails) {
         this.cartDetails = cartDetails;
     }
+
+    public double getTotalPrice() {
+        return cartDetails.stream()
+                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
+                .sum();
+    }
+
+    public double getTotalPriceWithTax() {
+        double total = cartDetails.stream()
+                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
+                .sum();
+        return total + 30000;
+    }
+
 }
